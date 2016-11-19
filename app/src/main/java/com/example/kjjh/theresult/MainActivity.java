@@ -1,6 +1,5 @@
 package com.example.kjjh.theresult;
 
-import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +12,6 @@ public class MainActivity extends AppCompatActivity {
     Button ButtonMin;
     Button ButtonAvg;
 
-    int[] arr = {14, 5, 9, 3, 22, 12};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,21 +21,13 @@ public class MainActivity extends AppCompatActivity {
         ButtonMin = (Button) findViewById(R.id.bt_min);
         ButtonAvg = (Button) findViewById(R.id.bt_avg);
 
-
         // Button1(Minimum)을 눌렀을 때
         ButtonMin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                int min = arr[0];  // 가장 작은 수를 저장할 변수
+                MyMinimum myMinimum = new MyMinimum();
 
-                // Find Minimum Number
-                for(int i=0; i<arr.length; i++){
-                    if(arr[i] < min){
-                        min = arr[i];
-                    }
-                }
-
-                ResultText.setText("The Results : " + min);
+                ResultText.setText("The Results : " + (int)myMinimum.getResult());
             }
         });
 
@@ -46,19 +35,48 @@ public class MainActivity extends AppCompatActivity {
         ButtonAvg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                float avg = 0;
+                MyAverage myAverage = new MyAverage();
 
-                for(int i=0; i<arr.length; i++)
-                    avg += arr[i];
-                avg /= arr.length;      // avg = arrSum / arrLength
+                double avgnum = myAverage.getResult();
 
+                // 소수점을 자르기 위한 코드 부분
                 java.text.DecimalFormat format = new java.text.DecimalFormat();
-                format.applyLocalizedPattern("0.#");        // 소수점 한 자리만
+                format.applyLocalizedPattern("0.##");        // 소수점 두 자리만
 
-                ResultText.setText("The Results : " + format.format(avg));
+                ResultText.setText("The Results : " + format.format(avgnum));
             }
         });
-
     }
 
+    // 추상 클래스 사용
+    public abstract class MyValues {
+        int[] arr = {14, 5, 9, 3, 22, 12};
+
+        public abstract double getResult();
+    }
+
+    // MyValues를 상속받는 자식 클래스에서 getResult 정의!
+    public class MyMinimum extends MyValues {
+        public double getResult() {
+            int min = arr[0];   // 가장 작은 수를 저장할 변수
+
+            // Find Minimum Number
+            for(int i=0; i<arr.length; i++)
+                if (arr[i] < min)
+                    min = arr[i];
+            return min;
+        }
+    }
+
+    public class MyAverage extends MyValues {
+        public double getResult() {
+            double avg = 0.0;
+
+            for(int i=0; i<arr.length; i++)
+                avg += arr[i];
+            avg /= arr.length;      // avg = arrSum / arrLength
+
+            return avg;
+        }
+    }
 }
