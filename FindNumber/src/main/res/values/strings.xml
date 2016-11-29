@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Quick Cording 02</string>
+    <string name="what_is_your_number">What is Your Number?</string>
+    <string name="your_number_is_oo">Your Number is OO!!</string>
+    <string name="send">SEND</string>
+    <string name="bigger">BIGGER</string>
+    <string name="smaller">SMALLER</string>
+    <string name="bingo">BINGO!!</string>
+</resources>
